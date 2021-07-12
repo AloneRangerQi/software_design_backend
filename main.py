@@ -241,24 +241,23 @@ async def Delete_Menu(request_data: Delete_Menu_Item):
     await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name).delete()
 
 
-
-@app.get('/{Canteen_name}')
-async def Select_canteen(Canteen_name):
-    '''
-    选择餐厅返回该餐厅的档口及其编号
-    '''
-    Select_canteen_result = await Shop.filter(Belong = Canteen_name)
-    if Select_canteen_result:
-        canteen_dict = {}
-        # count = 0
-        for canteen in Select_canteen_result:
-            canteen_dict[canteen.Shop_id] = canteen.Name
-            # count = count + 1
-            # print(canteen_dict)
-        print(canteen_dict)
-        return canteen_dict
-    else:
-        raise HTTPException(status_code = 400, detail = 'Canteen does not exsits')
+# @app.get('/{Canteen_name}')
+# async def Select_canteen(Canteen_name):
+#     '''
+#     选择餐厅返回该餐厅的档口及其编号
+#     '''
+#     Select_canteen_result = await Shop.filter(Belong = Canteen_name)
+#     if Select_canteen_result:
+#         canteen_dict = {}
+#         # count = 0
+#         for canteen in Select_canteen_result:
+#             canteen_dict[canteen.Shop_id] = canteen.Name
+#             # count = count + 1
+#             # print(canteen_dict)
+#         print(canteen_dict)
+#         return canteen_dict
+#     else:
+#         raise HTTPException(status_code = 400, detail = 'Canteen does not exsits')
 
 
 class Select_Menu_Item(BaseModel):
