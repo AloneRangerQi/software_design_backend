@@ -31,6 +31,9 @@ class Menu(Model):
     Shop_id:所属档口
     Menu_name:菜品名称
     Price:菜品单价
+    ----
+    添加标识字段断是否为套餐
+    ----
 
     菜品描述
     '''
@@ -39,6 +42,8 @@ class Menu(Model):
     Menu_name = fields.CharField(max_length = 20)
     Menu_des = fields.CharField(max_length = 50)
     Price = fields.IntField()
+    Packeage = fields.CharField(max_length = 20)
+
 
 
 class OrderSet(Model):
