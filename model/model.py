@@ -1,6 +1,7 @@
 from tortoise import Model, fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 
+
 class Information(Model):
     '''
     Usernmae:用户名（手机号）
@@ -10,6 +11,11 @@ class Information(Model):
     Username = fields.CharField(pk = True, max_length = 20)
     Password = fields.CharField(max_length = 20)
     Identity = fields.CharField(max_length = 20)
+
+
+# class Manager(Medel):
+#     Username = fields.ForeignKeyField('models.Information', to_field = 'Usernae', on_delete = fields.CASCADE)
+#     Shop_id = fields.IntField(pk = True)
 
 
 class Shop(Model):
@@ -38,7 +44,7 @@ class Menu(Model):
     Menu_name = fields.CharField(max_length = 20)
     Menu_des = fields.CharField(max_length = 50)
     Price = fields.IntField()
-    Packeage = fields.CharField(max_length = 20)
+    Package = fields.CharField(max_length = 20)
 
 
 

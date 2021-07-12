@@ -210,21 +210,21 @@ class Add_Menu_Item(BaseModel):
     Menu_name: str
     Menu_des: str
     price: str
-    Packeage: str
+    Package: str
 
 @app.post('/Add_Menu/')
 async def Add_Menu(request_data: Add_Menu_Item):
     Shop_id = request_data.Shop_id
     Menu_name = request_data.Menu_name
     Menu_des = request_data.Menu_des
-    price = int(request_data.price)
-    Packeage = request_data.Packeage
+    Price = int(request_data.price)
+    Package = request_data.Package
 
     if await Shop.filter(Shop_id = Shop_id):
         if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
             raise HTTPException(status_code = 400, detail = 'Menu has exsits')
         else:
-            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price, Packeage = Packeage).save()
+            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price, Package = Package).save()
     else:
         raise HTTPException(status_code = 400, detail = 'Shop not exsits')
 
@@ -265,7 +265,7 @@ class Select_Menu_Item(BaseModel):
 @app.post('/StudentMenu/')
 async def Select_Shop_Student(request_data: Select_Menu_Item):
     Shop_id = request_data.Shop_id
-    Shop_Menu = await Menu.filter(Shop_id = Shop_id)
+    Shop_Menu = await Menu.filter(Shop_id = Shop_id, Package = 'false')
     Shop_dict_final = {}
     Shop_list = []
     for menu in Shop_Menu:
@@ -279,6 +279,21 @@ async def Select_Shop_Student(request_data: Select_Menu_Item):
     return Shop_dict_final
 
 
+@app.post('/TeacherMenu/')
+async def Select_Shop_teacher(request_data: Select_Menu_Item):
+    Shop_id = request_data.Shop_id
+    Shop_Menu = await Menu.filter(Shop_id = Shop_id)
+    Shop_dict_final = {}
+    Shop_list = []
+    for menu in Shop_Menu:
+        Shop_dict = {}
+        Shop_dict['quantity'] = 0
+        Shop_dict['title'] = menu.Menu_name
+        Shop_dict['price'] = menu.Price
+        Shop_list.append(Shop_dict)
+    Shop_dict_final['data'] = Shop_list
+    print(Shop_dict_final)
+    return Shop_dict_final
 
 
 @app.get('/Order/{Order_id}')
