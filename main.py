@@ -275,6 +275,7 @@ async def Select_Shop_Student(request_data: Select_Menu_Item):
         Shop_dict['price'] = menu.Price
         Shop_list.append(Shop_dict)
     Shop_dict_final['data'] = Shop_list
+    print(Shop_dict_final)
     return Shop_dict_final
 
 
