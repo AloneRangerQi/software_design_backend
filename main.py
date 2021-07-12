@@ -21,6 +21,11 @@ register_tortoise(app,
                   add_exception_handlers = True,
                   generate_schemas = True)
 
+map = {
+    '234':1,
+    '345':2,
+    '456':3
+}
 
 class Item(BaseModel):
     '''
@@ -84,6 +89,9 @@ async def Login(request_data: Item):
                 PAS_DB = item[1]
             elif item[0] == 'Identity':
                 IDE_DB =  item[1]
+
+        # if usr in map.keys():
+        #     Login_dict ={}
         Login_dict = {
             'username': USR_DB,
             'password': PAS_DB,
@@ -142,15 +150,15 @@ async def Query(request_data: Order_Item):
     for Query_item in Query_result:
         item = {
             # 除了最后修改时间、订单号、状态都要
-            'username': Query_item.Username_id,
-            'address': Query_item.Address,
-            'shopId': Query_item.Shop_id_id,
+            # 'username': Query_item.Username_id,
+            # 'address': Query_item.Address,
+            # 'shopId': Query_item.Shop_id_id,
             'price': Query_item.Total_price,
             'detail': Query_item.Detail,
             'createTime': str(Query_item.Create_time)[0:10],
-            'name': Query_item.Name,
-            'phonenum': Query_item.Phonenum,
-            'studentnum': Query_item.Studentnum
+            # 'name': Query_item.Name,
+            # 'phonenum': Query_item.Phonenum,
+            # 'studentnum': Query_item.Studentnum
         }
         Query_list.append(item)
     Query_dict['data'] = Query_list
