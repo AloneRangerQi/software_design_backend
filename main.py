@@ -210,7 +210,7 @@ class Add_Menu_Item(BaseModel):
     Menu_name: str
     Menu_des: str
     price: str
-    # Packeage: str
+    Packeage: str
 
 @app.post('/Add_Menu/')
 async def Add_Menu(request_data: Add_Menu_Item):
@@ -218,13 +218,13 @@ async def Add_Menu(request_data: Add_Menu_Item):
     Menu_name = request_data.Menu_name
     Menu_des = request_data.Menu_des
     price = int(request_data.price)
-    # Packeage = request_data.Packeage
+    Packeage = request_data.Packeage
 
     if await Shop.filter(Shop_id = Shop_id):
         if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
             raise HTTPException(status_code = 400, detail = 'Menu has exsits')
         else:
-            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price).save()
+            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price, Packeage = Packeage).save()
     else:
         raise HTTPException(status_code = 400, detail = 'Shop not exsits')
 

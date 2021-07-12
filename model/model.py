@@ -38,7 +38,7 @@ class Menu(Model):
     Menu_name = fields.CharField(max_length = 20)
     Menu_des = fields.CharField(max_length = 50)
     Price = fields.IntField()
-    # Packeage = fields.CharField(max_length = 20)
+    Packeage = fields.CharField(max_length = 20)
 
 
 

@@ -25,3 +25,6 @@ import requests
 
 res_login = requests.post("http://127.0.0.1:8000/StudentMenu", json={'Shop_id':1})
 print(res_login.json())
+
+# res_login = requests.post("http://127.0.0.1:8000/Add_Shop", json={'Shop_id':1})
+# print(res_login.json())
