@@ -23,8 +23,11 @@ import requests
 # print(add_order.json())
 
 
-res_login = requests.post("http://127.0.0.1:8000/StudentMenu", json={'Shop_id':1})
-print(res_login.json())
+# res_login = requests.post("http://127.0.0.1:8000/StudentMenu", json={'Shop_id':1})
+# print(res_login.json())
 
 # res_login = requests.post("http://127.0.0.1:8000/Add_Shop", json={'Shop_id':1})
 # print(res_login.json())
+
+res_query = requests.post("http://127.0.0.1:8000/Student_Query/",json = {'usernmae':'13261773177'})
+print(res_query.json())

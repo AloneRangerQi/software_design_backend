@@ -91,12 +91,19 @@ async def Login(request_data: Item):
                 IDE_DB =  item[1]
 
         # if usr in map.keys():
-        #     Login_dict ={}
+        #     Login_dict ={
+        #         'username': USR_DB,
+        #         'password': PAS_DB,
+        #         'identity': IDE_DB,
+        #         'shop': map[usr]
+        #     }
+
+        # else:
         Login_dict = {
             'username': USR_DB,
             'password': PAS_DB,
             'identity': IDE_DB
-        }
+            }
         return Login_dict
     else:
         Login_dict = {
@@ -295,10 +302,10 @@ async def Select_Shop_Student(request_data: Select_Menu_Item):
     return Shop_dict_final
 
 
-@app.post('/TeacherMenu/')
+@app.post('/getherMenu/')
 async def Select_Shop_teacher(request_data: Select_Menu_Item):
     Shop_id = request_data.Shop_id
-    Shop_Menu = await Menu.filter(Shop_id = Shop_id)
+    Shop_Menu = await Menu.filter(Shop_id = Shop_id, Package = 'true')
     Shop_dict_final = {}
     Shop_list = []
     for menu in Shop_Menu:
@@ -312,6 +319,16 @@ async def Select_Shop_teacher(request_data: Select_Menu_Item):
     return Shop_dict_final
 
 
-@app.get('/Order/{Order_id}')
-async def Delete_Order(Order_id):
-    await OrderSet.filter(Order_id = Order_id).update(Order_status = 'Cancel')
+class Delete_Order_Item(BaseModel):
+    Order_id: int
+
+@app.post('/Delete_Order/')
+async def Delete_Order(request_data: Delete_Order_Item):
+    order_id = request_data.Order_id
+    await OrderSet.filter(Order_id = order_id).update(Order_status = 'Cancel')
+
+
+
+# @app.get('/Order/{Order_id}')
+# async def Delete_Order(Order_id):
+#     await OrderSet.filter(Order_id = Order_id).update(Order_status = 'Cancel')
