@@ -22,9 +22,9 @@ register_tortoise(app,
                   generate_schemas = True)
 
 map = {
-    '234':1,
-    '345':2,
-    '456':3
+    '234':0,
+    '456':1,
+    '678':2
 }
 
 class Item(BaseModel):
@@ -112,7 +112,6 @@ async def Login(request_data: Item):
             'identity':''
         }
         return Login_dict
-
 
 
 @app.post('/Change/', response_model = Change_Item)
@@ -229,7 +228,8 @@ async def Add_Shop(request_data: Add_Shop_Item):
 
 
 class Add_Menu_Item(BaseModel):
-    Shop_id: int
+    # Shop_id: int
+    Username: str
     Menu_name: str
     Menu_des: str
     price: str
@@ -237,19 +237,25 @@ class Add_Menu_Item(BaseModel):
 
 @app.post('/Add_Menu/')
 async def Add_Menu(request_data: Add_Menu_Item):
-    Shop_id = request_data.Shop_id
+    # Shop_id = request_data.Shop_id
+    Username = request_data.Username
     Menu_name = request_data.Menu_name
     Menu_des = request_data.Menu_des
     Price = int(request_data.price)
     Package = request_data.Package
+    print(Username)
+    Shop_id = map[Username]
+    print(Shop_id)
 
-    if await Shop.filter(Shop_id = Shop_id):
-        if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
-            raise HTTPException(status_code = 400, detail = 'Menu has exsits')
-        else:
-            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = Price, Package = Package).save()
-    else:
-        raise HTTPException(status_code = 400, detail = 'Shop not exsits')
+    await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = Price, Package = Package).save()
+
+    # if await Shop.filter(Shop_id = Shop_id):
+    #     if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
+    #         raise HTTPException(status_code = 400, detail = 'Menu has exsits')
+    #     else:
+    #         await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = Price, Package = Package).save()
+    # else:
+    #     raise HTTPException(status_code = 400, detail = 'Shop not exsits')
 
 
 
