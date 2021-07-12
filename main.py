@@ -162,6 +162,7 @@ class Add_Item(BaseModel):
     添加订单请求类
     '''
     Username: str
+    Name: str
     Studentnum: str
     Phonenum:  str
     Total_price: int
@@ -175,6 +176,7 @@ async def Add_order(request_data: Add_Item):
     提交订单
     '''
     username = request_data.Username
+    name = request_data.Name
     studentnum  = request_data.Studentnum
     phonenum =  request_data.Phonenum
     total_price = request_data.Total_price
@@ -182,7 +184,7 @@ async def Add_order(request_data: Add_Item):
     address = request_data.Address
     detail = request_data.Detail
 
-    await OrderSet(Username_id = username, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
+    await OrderSet(Username_id = username, Name = name, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
 
 
 class Add_Shop_Item(BaseModel):
@@ -198,13 +200,14 @@ async def Add_Shop(request_data: Add_Shop_Item):
     Belong = request_data.Belong
     Name = request_data.Name
     Manager = request_data.Manager
-    if await Shop.filter(Belong = Belong):
-        if await Shop.filter(Name = Name, Belong = Belong):
-            raise HTTPException(status_code = 400, detail = 'Shop has exsits')
-        else:
-            await Shop(Belong = Belong, Name = Name, Manager_id = Manager).save()
-    else:
-        raise HTTPException(status_code = 400, detail = 'Canteen not exsits')
+    # if await Shop.filter(Belong = Belong):
+    #     if await Shop.filter(Name = Name, Belong = Belong):
+    #         raise HTTPException(status_code = 400, detail = 'Shop has exsits')
+    #     else:
+    #         await Shop(Belong = Belong, Name = Name, Manager_id = Manager).save()
+    # else:
+    #     raise HTTPException(status_code = 400, detail = 'Canteen not exsits')
+    await Shop(Belong = Belong, Name = Name, Manager_id = Manager).save()
 
 
 

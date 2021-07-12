@@ -66,6 +66,7 @@ class OrderSet(Model):
     Total_price = fields.IntField()
     Shop_id = fields.ForeignKeyField('models.Shop', on_delete = fields.CASCADE)
     Username =  fields.ForeignKeyField('models.Information', to_field = 'Username', on_delete = fields.CASCADE)
+    Name = fields.CharField(max_length = 20)
     Studentnum  = fields.CharField(max_length =  20)
     Phonenum = fields.CharField(max_length = 20)
     Address = fields.CharField(max_length = 20)
