@@ -31,18 +31,14 @@ class Menu(Model):
     Shop_id:所属档口
     Menu_name:菜品名称
     Price:菜品单价
-    ----
-    添加标识字段断是否为套餐
-    ----
-
-    菜品描述
+    Package:套餐标志符
     '''
     Menu_id = fields.IntField(pk = True)
     Shop_id = fields.ForeignKeyField('models.Shop', on_delete = fields.CASCADE)
     Menu_name = fields.CharField(max_length = 20)
     Menu_des = fields.CharField(max_length = 50)
     Price = fields.IntField()
-    Packeage = fields.CharField(max_length = 20)
+    # Packeage = fields.CharField(max_length = 20)
 
 
 
@@ -54,10 +50,9 @@ class OrderSet(Model):
     Total_price:订单总价
     Shop_id:档口编号
     Username:消费者用户名
-
-    待加入
-    address:收货地址
+    Address:收货地址
     detail:字符字段、把订单信息全部记录
+    Order_status:订单状态（正常/取消）
     '''
     Order_id = fields.IntField(pk = True)
     Create_time = fields.DatetimeField(auto_now_add = True)

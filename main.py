@@ -22,8 +22,6 @@ register_tortoise(app,
                   generate_schemas = True)
 
 
-
-
 class Item(BaseModel):
     '''
     注册-登陆请求响应类
@@ -67,13 +65,12 @@ async def Enroll(request_data: Item):
     return request_data
 
 
-# @app.post("/Login/", response_model = Item)
+
 @app.post("/Login/")
 async def Login(request_data: Item):
     '''
     用户名在就返回结果
     '''
-
     usr = request_data.username
     pas = request_data.password
     ide = request_data.identity
@@ -87,26 +84,13 @@ async def Login(request_data: Item):
                 PAS_DB = item[1]
             elif item[0] == 'Identity':
                 IDE_DB =  item[1]
-        # if USR_DB == usr and PAS_DB == pas and IDE_DB == ide:
-            # print(0)
         Login_dict = {
             'username': USR_DB,
             'password': PAS_DB,
             'identity': IDE_DB
         }
         return Login_dict
-        # else:
-        #     # print(1)
-        #     Login_dict = {
-        #         'username':'',
-        #         'password':'',
-        #         'identity':''
-        #     }
-        #     return Login_dict
-            # raise HTTPException(status_code = 400, detail = 'Password Wrong')
     else:
-        # raise HTTPException(status_code = 400, detail = 'Username not Exsits')
-        # print(2)
         Login_dict = {
             'username':'',
             'password':'',
@@ -155,7 +139,6 @@ async def Query(request_data: Order_Item):
     Query_result = await OrderSet.filter(Username_id = usr)
     Query_dict = {}
     count = 0
-    # print(Query_result)
     for Query_item in Query_result:
         item = {
             'Order_id': Query_item.Order_id,
@@ -174,35 +157,15 @@ async def Query(request_data: Order_Item):
 
 
 
-
-
-    # for Query_item in Query_result:
-    #     Query_Shop_id
-    #     item = {'Order_id': Query_item.Order_id,
-    #             'Username': Query_item.Username_id,
-    #             'Create_time': Query_item.Create_time,
-    #             'Last_change_time': Query_item.Last_change_time,
-    #             'Shop_id': Query_item.Shop_id_id,
-    #             # 'Menu_id': Query_item.Menu_id_id,
-    #             # 'Count': Query_item.Count,
-    #             'Total_price': Query_item.Total_price,
-    #             'Order_status': Query_item.Order_status}
-    #     Query_dict[Query_item.Order_id] = item
-    # return Query_dict
-
-
 class Add_Item(BaseModel):
     '''
     添加订单请求类
     '''
-    # order_id: int
     username: str
     total_price: int
     shop_id: int
     address: str
     detail: str
-
-    # detail : Dict[int, int]
 
 @app.post('/Add_Order/', response_model = Add_Item)
 async def Add_order(request_data: Add_Item):
@@ -216,9 +179,7 @@ async def Add_order(request_data: Add_Item):
     detail = request_data.detail
 
     await OrderSet(Username_id = username, detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
-    # result = await OrderSet.filter()
-    # for key in detail_info.keys():
-    #     await Detail(Order_id_id = result[-1].Order_id, Menu_id_id = key, Times = detail_info[key]).save()
+
 
 
 class Add_Shop_Item(BaseModel):
@@ -249,7 +210,7 @@ class Add_Menu_Item(BaseModel):
     Menu_name: str
     Menu_des: str
     price: str
-    Packeage: str
+    # Packeage: str
 
 @app.post('/Add_Menu/')
 async def Add_Menu(request_data: Add_Menu_Item):
@@ -257,15 +218,16 @@ async def Add_Menu(request_data: Add_Menu_Item):
     Menu_name = request_data.Menu_name
     Menu_des = request_data.Menu_des
     price = int(request_data.price)
-    Packeage = request_data.Packeage
+    # Packeage = request_data.Packeage
 
     if await Shop.filter(Shop_id = Shop_id):
         if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
             raise HTTPException(status_code = 400, detail = 'Menu has exsits')
         else:
-            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price, Packeage = Packeage).save()
+            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price).save()
     else:
         raise HTTPException(status_code = 400, detail = 'Shop not exsits')
+
 
 
 class Delete_Menu_Item(BaseModel):
@@ -277,10 +239,6 @@ async def Delete_Menu(request_data: Delete_Menu_Item):
     Shop_id = request_data.Shop_id
     Menu_name = request_data.Menu_name
     await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name).delete()
-
-
-
-
 
 
 
@@ -303,83 +261,26 @@ async def Select_canteen(Canteen_name):
         raise HTTPException(status_code = 400, detail = 'Canteen does not exsits')
 
 
-
-@app.get('/Shop_id/{Shop_id}/Username/{Username}')
-async def Select_Shop(Shop_id, Username):
-    '''
-    选择档口返回档口的菜品信息
-    '''
-    Identity_Result = await Information.filter(Username = Username)
-    print(Identity_Result[0].Identity)
-
-    Shop_list = []
+class Select_Menu_Item(BaseModel):
+    Shop_id: int
+@app.post('/StudentMenu/')
+async def Select_Shop_Student(request_data: Select_Menu_Item):
+    Shop_id = request_data.Shop_id
+    Shop_Menu = await Menu.filter(Shop_id = Shop_id)
     Shop_dict_final = {}
+    Shop_list = []
+    for menu in Shop_Menu:
+        Shop_dict = {}
+        Shop_dict['quantity'] = 0
+        Shop_dict['title'] = menu.Menu_name
+        Shop_dict['price'] = menu.Price
+        Shop_list.append(Shop_dict)
+    Shop_dict_final['data'] = Shop_list
+    return Shop_dict_final
 
-    if Identity_Result[0].Identity == 'teachers':
-        Select_Shop_result = await Menu.filter(Shop_id_id = Shop_id)
-        for menu in Select_Shop_result:
-            Shop_dict = {}
-            # Shop_dict[menu.Menu_id] = menu.Menu_name
-            Shop_dict['quantity'] = 0
-            Shop_dict['title'] = menu.Menu_name
-            Shop_dict['price'] = menu.Price
-
-            Shop_list.append(Shop_dict)
-
-        Shop_dict_final['data'] = Shop_list
-
-        return Shop_dict_final
-    else:
-        Select_Shop_result = await Menu.filter(Shop_id_id = Shop_id, Packeage = 'No')
-        for menu in Select_Shop_result:
-            Shop_dict = {}
-            # Shop_dict[menu.Menu_id] = menu.Menu_name
-            Shop_dict['quantity'] = 0
-            Shop_dict['title'] = menu.Menu_name
-            Shop_dict['price'] = menu.Price
-
-            Shop_list.append(Shop_dict)
-
-        Shop_dict_final['data'] = Shop_list
-
-        return Shop_dict_final
-
-
-
-
-
-    # Shop_list = []
-    # Shop_dict_final = {}
-    # Select_Shop_result = await Menu.filter(Shop_id_id = Shop_id)
-    # for menu in Select_Shop_result:
-    #     Shop_dict = {}
-    #     # Shop_dict[menu.Menu_id] = menu.Menu_name
-    #     Shop_dict['quantity'] = 0
-    #     Shop_dict['title'] = menu.Menu_name
-    #     Shop_dict['price'] = menu.Price
-    #
-    #     Shop_list.append(Shop_dict)
-    #
-    # Shop_dict_final['data'] = Shop_list
-    #
-    # return Shop_dict_final
-
-    # Select_Shop_result = await Shop.filter(Belong = Canteen_name, Name = Shop_name)
-    # if Select_Shop_result:
-    #     Select_Shop_id = Select_Shop_result[0].Shop_id
-    #     print(Select_Shop_id)
-    # else:
-    #     raise HTTPException(status_code = 400, detail = 'Shop does not exsits')
 
 
 
 @app.get('/Order/{Order_id}')
 async def Delete_Order(Order_id):
     await OrderSet.filter(Order_id = Order_id).update(Order_status = 'Cancel')
-    # Delete_order = await OrderSet.filter(Order_id = Order_id)
-    # if Delete_order:
-    #     for order in Delete_order:
-    #         await Orderset
-            # order.Order_status = 'Delete'
-            # await OrderSet(Order_id = order.Order_id, Order_status = 'Delete').save()
-            # await app.execute_query("UPDATE OrderSet Order_status = 'Concel' WHERE Order_id = order.Order_id")
