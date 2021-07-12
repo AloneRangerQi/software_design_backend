@@ -161,25 +161,28 @@ class Add_Item(BaseModel):
     '''
     添加订单请求类
     '''
-    username: str
-    total_price: int
-    shop_id: int
-    address: str
-    detail: str
+    Username: str
+    Studentnum: str
+    Phonenum:  str
+    Total_price: int
+    Shop_id: int
+    Address: str
+    Detail: str
 
-@app.post('/Add_Order/', response_model = Add_Item)
+@app.post('/Add_Order/')
 async def Add_order(request_data: Add_Item):
     '''
     提交订单
     '''
-    username = request_data.username
-    total_price = request_data.total_price
-    shop_id = request_data.shop_id
-    address = request_data.address
-    detail = request_data.detail
+    username = request_data.Username
+    studentnum  = request_data.Studentnum
+    phonenum =  request_data.Phonenum
+    total_price = request_data.Total_price
+    shop_id = request_data.Shop_id
+    address = request_data.Address
+    detail = request_data.Detail
 
-    await OrderSet(Username_id = username, detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
-
+    await OrderSet(Username_id = username, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
 
 
 class Add_Shop_Item(BaseModel):
@@ -224,7 +227,7 @@ async def Add_Menu(request_data: Add_Menu_Item):
         if await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name):
             raise HTTPException(status_code = 400, detail = 'Menu has exsits')
         else:
-            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = price, Package = Package).save()
+            await Menu(Shop_id_id = Shop_id, Menu_name = Menu_name, Menu_des = Menu_des, Price = Price, Package = Package).save()
     else:
         raise HTTPException(status_code = 400, detail = 'Shop not exsits')
 
