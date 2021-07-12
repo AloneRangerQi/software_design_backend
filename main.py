@@ -130,7 +130,7 @@ async def Change(request_data: Change_Item):
         raise HTTPException(status_code = 400, detail = 'Username not Exsits')
 
 
-@app.post('/Query/')
+@app.post('/Student_Query/')
 async def Query(request_data: Order_Item):
     '''
     查询订单
@@ -138,21 +138,23 @@ async def Query(request_data: Order_Item):
     usr = request_data.username
     Query_result = await OrderSet.filter(Username_id = usr)
     Query_dict = {}
-    count = 0
+    Query_list = []
     for Query_item in Query_result:
         item = {
-            'Order_id': Query_item.Order_id,
-            'Username': Query_item.Username_id,
-            'Address': Query_item.Address,
-            'Shop_id': Query_item.Shop_id_id,
-            'Price': Query_item.Total_price,
-            'Detail': Query_item.detail,
-            'Create_time': Query_item.Create_time,
-            'Last_change_time': Query_item.Last_change_time,
-            'Order_status': Query_item.Order_status
+            # 除了最后修改时间、订单号、状态都要
+            'username': Query_item.Username_id,
+            'address': Query_item.Address,
+            'shopId': Query_item.Shop_id_id,
+            'price': Query_item.Total_price,
+            'detail': Query_item.Detail,
+            'createTime': str(Query_item.Create_time)[0:10],
+            'name': Query_item.Name,
+            'phonenum': Query_item.Phonenum,
+            'studentnum': Query_item.Studentnum
         }
-        Query_dict[count] = item
-        count += 1
+        Query_list.append(item)
+    Query_dict['data'] = Query_list
+    # print(Query_dict)
     return Query_dict
 
 
