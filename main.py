@@ -22,7 +22,7 @@ register_tortoise(app,
                   generate_schemas = True)
 
 map = {
-    '234': 1,
+    '123': 1,
     '456': 2,
     '678': 3
 
@@ -410,12 +410,12 @@ async def Show_ManagerMenu(request_data: managerItem):
 
 
 class shopOrder_Item(BaseModel):
-    shopid: str
+    username: str
 
 @app.post('/shopOrder/')
 async def Show_Shop_Order(request_data: shopOrder_Item):
-    shopid = request_data.shopid
-
+    username = request_data.username
+    shopid = map[username]
     Order_result = await OrderSet.filter(Shop_id_id = shopid)
     print(Order_result)
     print(type(Order_result))
