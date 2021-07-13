@@ -201,7 +201,43 @@ async def Add_order(request_data: Add_Item):
     address = request_data.Address
     detail = request_data.Detail
 
-    await OrderSet(Username_id = username, Name = name, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
+    await OrderSet(Username_id = username, Name = name, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Normal', Time = 'None').save()
+
+
+
+class Add_Item_teacher(BaseModel):
+    '''
+    套餐请求添加订单请求类
+    '''
+    Username: str
+    Name: str
+    Studentnum: str
+    Phonenum:  str
+    Total_price: int
+    Shop_id: int
+    Address: str
+    Detail: str
+    Time: str
+
+@app.post('/Add_Order_Teacher/')
+async def Add_order(request_data: Add_Item_teacher):
+    '''
+    提交订单
+    '''
+    username = request_data.Username
+    name = request_data.Name
+    studentnum  = request_data.Studentnum
+    phonenum =  request_data.Phonenum
+    total_price = request_data.Total_price
+    shop_id = request_data.Shop_id
+    address = request_data.Address
+    detail = request_data.Detail
+    time = request_data.Time
+    await OrderSet(Time = time, Username_id = username, Name = name, Studentnum = studentnum, Phonenum = phonenum, Detail = detail, Address = address, Shop_id_id = shop_id, Total_price = total_price, Order_status = 'Nomal').save()
+
+
+
+
 
 
 class Add_Shop_Item(BaseModel):

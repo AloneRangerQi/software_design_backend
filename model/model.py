@@ -50,6 +50,7 @@ class Menu(Model):
 
 class OrderSet(Model):
     '''
+    加入教室预约订餐字段
     Order_id:订单编号（自增主键）
     Create_time:订单创建时间
     Last_change_time:订单最后修改时间
@@ -72,7 +73,7 @@ class OrderSet(Model):
     Address = fields.CharField(max_length = 20)
     Detail = fields.CharField(max_length = 40)
     Order_status = fields.CharField(max_length = 20)
-
+    Time = fields.CharField(max_length =  20)
 
 # class Detail(Model):
 #     '''
