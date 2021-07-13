@@ -22,9 +22,10 @@ register_tortoise(app,
                   generate_schemas = True)
 
 map = {
-    '234':0,
-    '456':1,
-    '678':2
+    '234': 1,
+    '456': 2,
+    '678': 3
+
 }
 
 class Item(BaseModel):
@@ -260,14 +261,23 @@ async def Add_Menu(request_data: Add_Menu_Item):
 
 
 class Delete_Menu_Item(BaseModel):
-    Shop_id: int
-    Menu_name: str
+    userName: str
+    menuName: str
 
 @app.post('/Delete_Menu/')
 async def Delete_Menu(request_data: Delete_Menu_Item):
-    Shop_id = request_data.Shop_id
-    Menu_name = request_data.Menu_name
-    await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name).delete()
+    username = request_data.userName
+    menuname = request_data.menuName
+    print(username)
+    shopid = map[username]
+    print(shopid)
+    await Menu.filter(Shop_id_id = shopid, Menu_name = menuname).delete()
+
+
+
+    # Shop_id = request_data.Shop_id
+    # Menu_name = request_data.Menu_name
+    # await Menu.filter(Shop_id_id = Shop_id, Menu_name = Menu_name).delete()
 
 
 # @app.get('/{Canteen_name}')
@@ -332,6 +342,35 @@ class Delete_Order_Item(BaseModel):
 async def Delete_Order(request_data: Delete_Order_Item):
     order_id = request_data.Order_id
     await OrderSet.filter(Order_id = order_id).update(Order_status = 'Cancel')
+
+
+class managerItem(BaseModel):
+    userName: str
+    # menuName: str
+
+@app.post('/managerMenu/')
+async def Show_ManagerMenu(request_data: managerItem):
+    username = request_data.userName
+    # menuname = request_data.menuName
+    # print(username)
+    shopid = map[username]
+    # print(shopid)
+    menu_result = await Menu.filter(Shop_id_id = shopid)
+    # print(menu_result)
+    manager_dict = {}
+    manager_list = []
+    for menu in menu_result:
+        item = {
+            'name': menu.Menu_name,
+            'des': menu.Menu_des,
+            'price': menu.Price
+        }
+        manager_list.append(item)
+    manager_dict['data'] = manager_list
+    print(manager_dict)
+    return manager_dict
+
+
 
 
 
