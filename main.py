@@ -23,6 +23,7 @@ register_tortoise(app,
 
 map = {
     '234': 1,
+    # '123':1,
     '456': 2,
     '678': 3
 
@@ -431,7 +432,8 @@ async def Show_Shop_Order(request_data: shopOrder_Item):
             'address': order.Address,
             'detail': order.Detail,
             'price': order.Total_price,
-            'bookTime': order.Time
+            'bookTime': order.Time,
+            'studentnum': order.Studentnum
             }
         print(item)
         shop_list.append(item)
