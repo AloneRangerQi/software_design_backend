@@ -154,6 +154,7 @@ async def Query(request_data: Order_Item):
     Query_result = await OrderSet.filter(Username_id = usr)
     Query_dict = {}
     Query_list = []
+    Query_result.reverse()
     for Query_item in Query_result:
         item = {
             # 除了最后修改时间、订单号、状态都要
@@ -406,6 +407,36 @@ async def Show_ManagerMenu(request_data: managerItem):
     print(manager_dict)
     return manager_dict
 
+
+
+class shopOrder_Item(BaseModel):
+    shopid: str
+
+@app.post('/shopOrder/')
+async def Show_Shop_Order(request_data: shopOrder_Item):
+    shopid = request_data.shopid
+
+    Order_result = await OrderSet.filter(Shop_id_id = shopid)
+    print(Order_result)
+    print(type(Order_result))
+    shop_dict = {}
+    shop_list = []
+    Order_result.reverse()
+    for order in Order_result:
+        item = {
+            'createTime': str(order.Create_time)[0:10],
+            'usernae': order.Username_id,
+            'name': order.Name,
+            'phonenum': order.Phonenum,
+            'address': order.Address,
+            'detail': order.Detail,
+            'price': order.Total_price,
+            'bookTime': order.Time
+            }
+        print(item)
+        shop_list.append(item)
+    shop_dict['data'] = shop_list
+    return shop_dict
 
 
 
