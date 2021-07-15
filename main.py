@@ -147,14 +147,14 @@ async def Change(request_data: Change_Item):
         await Information(Username = usr, Password = new_pas, Identity = IDE_DB).save()
         data = {
             'username':  usr,
-            'password': new_pas,
+            'password': new_pas
             # 'identity': IDE_DB
         }
         return data
     else:
         data = {
             'username':'',
-            'password':'',
+            'password':''
             # 'identity':''
         }
         return data
