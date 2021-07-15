@@ -71,7 +71,14 @@ async def Enroll(request_data: Item):
 
     Enroll_result = await Information.filter(Username = usr)
     if Enroll_result:
-        raise HTTPException(status_code = 400, detail = 'Username already Registered')
+        data = {
+            'username':'',
+            'password':'',
+            'identity':''
+
+        }
+        # raise HTTPException(status_code = 400, detail = 'Username already Registered')
+        return data
     await Information(Username = usr, Password = pas, Identity = ide).save()
     return request_data
 
