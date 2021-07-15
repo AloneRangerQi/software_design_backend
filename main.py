@@ -20,13 +20,18 @@ register_tortoise(app,
                   modules = {'models':['model.model']},
                   add_exception_handlers = True,
                   generate_schemas = True)
-
+# 需要修改成完整版
 map = {
     '234': 1,
-    # '123':1,
-    '456': 2,
-    '678': 3
-
+    '567': 2,
+    '789': 3,
+    '1234': 4,
+    '1235': 5,
+    '1236': 6,
+    '1237': 7,
+    '1238': 8,
+    '1239': 9,
+    '1230': 10
 }
 
 class Item(BaseModel):
@@ -58,8 +63,7 @@ class Order_Item(BaseModel):
 @app.post("/enroll/", response_model=Item)
 async def Enroll(request_data: Item):
     '''
-    必须传json的post接口
-    :param request_data: json字段（Item类）
+    注册接口
     '''
     usr = request_data.username
     pas = request_data.password
@@ -76,7 +80,7 @@ async def Enroll(request_data: Item):
 @app.post("/Login/")
 async def Login(request_data: Item):
     '''
-    用户名在就返回结果
+    登陆接口
     '''
     usr = request_data.username
     pas = request_data.password
@@ -116,8 +120,11 @@ async def Login(request_data: Item):
         return Login_dict
 
 
-@app.post('/Change/', response_model = Change_Item)
+@app.post('/Change/')
 async def Change(request_data: Change_Item):
+    '''
+    更改密码、没有实现
+    '''
     usr = request_data.username
     old_pas = request_data.old_password
     new_pas = request_data.new_password
@@ -138,12 +145,26 @@ async def Change(request_data: Change_Item):
             '''
             await Information.filter(Username = usr).delete()
             await Information(Username = usr, Password = new_pas, Identity = IDE_DB).save()
-            print('Change Successful, The new password is:', new_pas)
-            return request_data
+            data = {
+                'username':  usr,
+                'password': new_pas,
+                'identity': IDE_DB
+            }
+            return data
         else:
-            raise HTTPException(status_code = 400, detail = 'Password Wrong')
+            data = {
+                'username':'',
+                'password':'',
+                'identity':''
+            }
+            return data
     else:
-        raise HTTPException(status_code = 400, detail = 'Username not Exsits')
+        data = {
+            'username':'',
+            'password':'',
+            'identity':''
+        }
+        return data
 
 
 @app.post('/Student_Query/')
@@ -276,6 +297,9 @@ class Add_Menu_Item(BaseModel):
 
 @app.post('/Add_Menu/')
 async def Add_Menu(request_data: Add_Menu_Item):
+    '''
+    添加订单
+    '''
     # Shop_id = request_data.Shop_id
     Username = request_data.Username
     Menu_name = request_data.Menu_name
@@ -304,6 +328,9 @@ class Delete_Menu_Item(BaseModel):
 
 @app.post('/Delete_Menu/')
 async def Delete_Menu(request_data: Delete_Menu_Item):
+    '''
+    删除订单
+    '''
     username = request_data.userName
     menuname = request_data.menuName
     print(username)
@@ -341,6 +368,7 @@ class Select_Menu_Item(BaseModel):
     Shop_id: int
 @app.post('/StudentMenu/')
 async def Select_Shop_Student(request_data: Select_Menu_Item):
+    '''学生订餐菜品打印'''
     Shop_id = request_data.Shop_id
     Shop_Menu = await Menu.filter(Shop_id = Shop_id, Package = 'false')
     Shop_dict_final = {}
@@ -358,6 +386,9 @@ async def Select_Shop_Student(request_data: Select_Menu_Item):
 
 @app.post('/getherMenu/')
 async def Select_Shop_teacher(request_data: Select_Menu_Item):
+    '''
+    教室订单菜品打印
+    '''
     Shop_id = request_data.Shop_id
     Shop_Menu = await Menu.filter(Shop_id = Shop_id, Package = 'true')
     Shop_dict_final = {}
@@ -378,6 +409,9 @@ class Delete_Order_Item(BaseModel):
 
 @app.post('/Delete_Order/')
 async def Delete_Order(request_data: Delete_Order_Item):
+    '''
+    删除订单，没有用到
+    '''
     order_id = request_data.Order_id
     await OrderSet.filter(Order_id = order_id).update(Order_status = 'Cancel')
 
@@ -388,6 +422,9 @@ class managerItem(BaseModel):
 
 @app.post('/managerMenu/')
 async def Show_ManagerMenu(request_data: managerItem):
+    '''
+    下架菜品显示
+    '''
     username = request_data.userName
     # menuname = request_data.menuName
     # print(username)
@@ -415,6 +452,9 @@ class shopOrder_Item(BaseModel):
 
 @app.post('/shopOrder/')
 async def Show_Shop_Order(request_data: shopOrder_Item):
+    '''
+    档口订单查看
+    '''
     username = request_data.username
     shopid = map[username]
     Order_result = await OrderSet.filter(Shop_id_id = shopid)
