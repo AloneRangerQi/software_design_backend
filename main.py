@@ -22,16 +22,11 @@ register_tortoise(app,
                   generate_schemas = True)
 # 需要修改成完整版
 map = {
-    '234': 1,
-    '567': 2,
-    '789': 3,
-    '1234': 4,
-    '1235': 5,
-    '1236': 6,
-    '1237': 7,
-    '1238': 8,
-    '1239': 9,
-    '1230': 10
+    'admin1': 1,
+    'admin2': 2,
+    'admin3': 3,
+    'admin4': 4,
+    'admin6': 5
 }
 
 class Item(BaseModel):
