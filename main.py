@@ -50,7 +50,7 @@ class Change_Item(BaseModel):
     修改密码响应类
     '''
     username: str
-    old_password: str
+    # old_password: str
     new_password: str
 
 class Order_Item(BaseModel):
@@ -126,7 +126,7 @@ async def Change(request_data: Change_Item):
     更改密码、没有实现
     '''
     usr = request_data.username
-    old_pas = request_data.old_password
+    # old_pas = request_data.old_password
     new_pas = request_data.new_password
 
     Serach_result = await Information.filter(Username = usr).first()
@@ -138,31 +138,24 @@ async def Change(request_data: Change_Item):
                 PAS_DB = item[1]
             elif item[0] == 'Identity':
                 IDE_DB = item[1]
-        if PAS_DB == old_pas:
-            '''
-            删除原先记录
-            创建新纪录
-            '''
-            await Information.filter(Username = usr).delete()
-            await Information(Username = usr, Password = new_pas, Identity = IDE_DB).save()
-            data = {
-                'username':  usr,
-                'password': new_pas,
-                'identity': IDE_DB
-            }
-            return data
-        else:
-            data = {
-                'username':'',
-                'password':'',
-                'identity':''
-            }
-            return data
+        # if PAS_DB == old_pas:
+        #     '''
+        #     删除原先记录
+        #     创建新纪录
+        #     '''
+        await Information.filter(Username = usr).delete()
+        await Information(Username = usr, Password = new_pas, Identity = IDE_DB).save()
+        data = {
+            'username':  usr,
+            'password': new_pas,
+            # 'identity': IDE_DB
+        }
+        return data
     else:
         data = {
             'username':'',
             'password':'',
-            'identity':''
+            # 'identity':''
         }
         return data
 
